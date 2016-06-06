@@ -1,7 +1,7 @@
 {
   "name": "ndom",
   "description": "A DOM wrapper with IntelliSense.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./es5/ndom.js",
   "scripts": {
     "build:es5": "babel src --out-dir es5",
