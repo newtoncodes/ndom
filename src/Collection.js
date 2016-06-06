@@ -398,7 +398,7 @@ class Collection extends Array {
         }
         if (!type || !handler || (typeof handler !== 'function')) return this;
 
-        this.forEach(node => addListener(node, type, handler, false, selector));
+        this.forEach(node => addListener(this.____ndom____, node, type, handler, false, selector));
 
         return this;
     }
@@ -416,7 +416,7 @@ class Collection extends Array {
         }
         if (!type || !handler || (typeof handler !== 'function')) return this;
 
-        this.forEach(node => addListener(node, type, handler, true, selector));
+        this.forEach(node => addListener(this.____ndom____, node, type, handler, true, selector));
 
         return this;
     }
@@ -435,7 +435,7 @@ class Collection extends Array {
 
         if (!type || !handler || (typeof handler !== 'function')) return this;
 
-        this.forEach(node => removeListener(node, type, handler, selector));
+        this.forEach(node => removeListener(this.____ndom____, node, type, handler, selector));
 
         return this;
     }
@@ -640,7 +640,7 @@ class Collection extends Array {
 }
 
 
-function addListener(node, type, handler, once, selector) {
+function addListener(ndom, node, type, handler, once, selector) {
     if (!node._____events_____) node._____events_____ = {};
     if (!node._____events_____[type]) node._____events_____[type] = [];
 
@@ -650,15 +650,15 @@ function addListener(node, type, handler, once, selector) {
     }
 
     let cb = !selector ? (e) => {
-        if (once) removeListener(node, type, handler);
+        if (once) removeListener(ndom, node, type, handler);
         handler.call(node, e, node);
     } : (e) => {
         let target = e.target;
-        let isRight = target && this.____ndom____.match(target, selector);
+        let isRight = target && ndom.match(target, selector);
 
         if (!isRight) while (!isRight && target && target.parentNode) {
             target = target.parentNode;
-            if (this.____ndom____.match(target, selector)) {
+            if (ndom.match(target, selector)) {
                 isRight = true;
                 break;
             }
@@ -668,7 +668,7 @@ function addListener(node, type, handler, once, selector) {
 
         e.realTarget = target;
 
-        if (once) removeListener(node, type, handler, selector);
+        if (once) removeListener(ndom, node, type, handler, selector);
         handler.call(node, e, node);
     };
     cb.____handler____ = handler;
@@ -680,7 +680,7 @@ function addListener(node, type, handler, once, selector) {
     list.push(cb);
 }
 
-function removeListener(node, type, handler, selector) {
+function removeListener(ndom, node, type, handler, selector) {
     if (!handler || !node._____events_____ || !node._____events_____[type]) return;
 
     let list = node._____events_____[type];
